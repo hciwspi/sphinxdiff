@@ -1,0 +1,23 @@
+%
+% sphinxdiff.sty
+%
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{sphinxdiff}[2018/02/15 LaTeX package (diff markup)]
+
+\RequirePackage{xcolor}
+
+
+\definecolor{SphinxDiffAddText}{rgb}{0, 0.6, 0}
+\definecolor{SphinxDiffDelText}{rgb}{0.6, 0, 0}
+\definecolor{SphinxDiffAddBg}{rgb}{0.96, 1, 0.96}
+\definecolor{SphinxDiffDelBg}{rgb}{1, 0.96, 0.96}
+
+
+%\newcommand{\SphinxDiffAdd}[1]{\colorbox{SphinxDiffAddBg}{\color{SphinxDiffAddText} #1}~\newline}
+%\newcommand{\SphinxDiffDel}[1]{\colorbox{SphinxDiffDelBg}{\color{SphinxDiffDelText} #1}}
+%\newcommand{\SphinxDiffChange}[2][]{\colorbox{SphinxDiffAddBg}{\color{SphinxDiffAddText} #1}\colorbox{SphinxDiffDelBg}{\color{SphinxDiffDelText} \sout{#2}}}
+
+\newcommand{\SphinxDiffAdd}[1]{{\color{SphinxDiffAddText}#1}}
+\newcommand{\SphinxDiffDel}[1]{{\color{SphinxDiffDelText}#1}}
+\newcommand{\SphinxDiffChange}[2][]{\SphinxDiffAdd{#1}\SphinxDiffDel{#2}}
