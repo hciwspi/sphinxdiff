@@ -21,17 +21,27 @@ from sphinxdiff.to_latex import (visit_changed_in_latex,
 
 def nop(self, node): pass
 
-def _append_config_list(config, name, defaults):
-    """Append values to a Sphinx configuration item that is a list/tuple
+
+class ConfigUpdater(object):
+    """A callback for 'config-inited' event 
     
-    Designed to work with sphinx.Config objects as first argument.
+    1. It appends the sphinxdiff.sty to config.latex_additional_files
+    2. It sets our special value config.sphinxdiff_tags to whatever the user
+       specified in the conf.py. In case of errors it will be an empty tuple.
     """
-    try:
-        config_tuple = config.values[name]
-        new_defaults = config_tuple[0] + defaults
-        config.values[name] = (new_defaults,) + config_tuple[1: ]
-    except KeyError:
-        config.add(name, defaults, rebuild='env', types='dummy')
+    def __init__(self, texinputs):
+        self.texinputs = texinputs
+    
+    def __call__(self, app, config):
+        try:
+            tags = config._raw_config['sphinxdiff_tags']
+            config['sphinxdiff_tags'] = tuple(tags)
+        except Exception:
+            config['sphinxdiff_tags'] = ()
+
+        extra_files = config['latex_additional_files']
+        config['latex_additional_files'] = self.texinputs + list(extra_files)
+
 
 def setup(app):
     """Initialization point of the directives / roles.
@@ -41,7 +51,7 @@ def setup(app):
     texinputs = os.path.join(here, 'texinputs')
     listtexinputs = [os.path.join(texinputs, f) for f in os.listdir(texinputs)]
     
-    _append_config_list(app.config, 'latex_additional_files', listtexinputs)
+    app.connect('config-inited', ConfigUpdater(listtexinputs))
     
     app.add_transform(TransformOnly)
 

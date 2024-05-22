@@ -13,24 +13,17 @@ logger = getLogger(__name__)
 class TransformOnly(SphinxTransform):
     
     default_priority = 406
-    tags = ('production',
-            )
+    tags = ()
     
     def __init__(self, document, startnode=None):
         super().__init__(document, startnode)
-        # try:
-        #     self.tags = self.config.values['sphinxdiff_tags']
-        # except KeyError as e:
-        #     self.tags = ()
-       
-        #print("Constructing TransformOnly", self.app.tags, type(self.app.tags), self.config.values)
+        try:
+            self.tags = self.config['sphinxdiff_tags']
+        except KeyError as e:
+            self.tags = ()
+        
+        #print('TransformOnly.__init__', self.tags)
 
-    def register_tags(self, tags):
-        if isinstance(tags, Tags):
-            self.tags = tags.tags.keys()
-        else:
-            self.tags = tags
-    
     def apply(self):
         #dbg_print_ast(self.document)
         

@@ -4,7 +4,7 @@ from .diff import setup as diff_setup
 from . import prototype
 
 
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 __version_full__ = __version__
 
 
