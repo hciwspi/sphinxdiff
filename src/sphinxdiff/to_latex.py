@@ -46,9 +46,9 @@ def depart_changed_in_latex(self, node):
         
 def visit_change_node_latex(self, node):
     if isinstance(node, NodeDiffAdd):
-        self.body.append('%\n{\n\n\color{SphinxDiffAddText} ')
+        self.body.append('%\n{\n\n\\color{SphinxDiffAddText} ')
     elif isinstance(node, NodeDiffDel):
-        self.body.append('%\n{\n\n\color{SphinxDiffDelText}')
+        self.body.append('%\n{\n\n\\color{SphinxDiffDelText}')
     else:
         print("TODO: Split change into add / delete")
 
