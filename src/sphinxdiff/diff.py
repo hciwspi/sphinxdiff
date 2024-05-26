@@ -41,6 +41,12 @@ class ConfigUpdater(object):
 
         extra_files = config['latex_additional_files']
         config['latex_additional_files'] = self.texinputs + list(extra_files)
+        
+        elements = config['latex_elements'] # is a dict
+        preamble = elements.get('preamble', '')
+        if '{sphinxdiff}' not in preamble:
+             elements['preamble'] = '\n'.join((preamble,
+                                               r'\usepackage{sphinxdiff}'))
 
 
 def setup(app):
