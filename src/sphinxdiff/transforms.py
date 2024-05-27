@@ -26,29 +26,38 @@ class TransformOnly(SphinxTransform):
 
     def apply(self):
         #dbg_print_ast(self.document)
-        
+
         for node in self.document.traverse(only):
             #print('TransformOnly:', node, node['expr'])
             expression = node['expr']
+            adds = []
+            dels = []
             for tag in self.tags:
-                ## TODO: This heuristic does cover multiple tags in expression
                 val = self.eval_expression_for_tag(expression, tag)
                 #print('TransformOnly:', expression, tag, '->', val)
                 if val == (True, False):
-                    diff_node = NodeDiffAdd('')
+                    adds.append(tag)
                 elif val == (False, True):
-                    diff_node = NodeDiffDel('')
-                else:
-                    continue
+                    dels.append(tag)
+
+            if adds and dels:
+                raise NotImplementedError("TODO: Implement text to simultaneously added and deleted by (different) tags")
+            elif adds:
+                diff_node = NodeDiffAdd('')
+                node['tags'] = adds
+            elif dels:
+                diff_node = NodeDiffDel('')
+                node['tags'] = dels
+            else:
+                continue
                 
-                diff_node.children = node.children
-                diff_node.source = node.source
-                diff_node.line = node.line
-                for child in diff_node.children:
-                    child.parent = diff_node
-                #up = node.parent
-                node.replace_self(diff_node)
-                break
+            diff_node.children = node.children
+            diff_node.source = node.source
+            diff_node.line = node.line
+            for child in diff_node.children:
+                child.parent = diff_node
+            #up = node.parent
+            node.replace_self(diff_node)
                 
                 
     def eval_expression_for_tag(self, expression, tagname):
