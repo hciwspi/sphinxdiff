@@ -1,1 +1,2 @@
-
+recursive-include sphinxdiff *.css
+recursive-include sphinxdiff *.sty

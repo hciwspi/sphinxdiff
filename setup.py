@@ -4,8 +4,7 @@
 import os
 from io import open
 from setuptools import setup, find_packages
-#from sphinxdiff import __version__
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
@@ -17,7 +16,7 @@ with open(os.path.join(this_dir, 'readme.rst'), encoding='utf-8') as f:
 setup(
     name='sphinxdiff',
     version=__version__,
-    url='XXX',
+    url='https://github.com/hciwspi/sphinxdiff',
     license='MIT',
     author='Joachim Ballmann',
     author_email='jb@eberhardus.com',
@@ -27,6 +26,8 @@ setup(
     py_modules = ['sphinxdiff'],
     packages=find_packages('src', exclude=['doc', 'templates',]),
     package_dir={'': 'src'},
+    package_data={'sphinxdiff': ['htmltheme/static/css/sphinxdiff.css',
+                                 'texinputs/sphinxdiff.sty']},
     zip_safe=False,
     include_package_data=True,
     classifiers=[
@@ -42,10 +43,9 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
         'Topic :: Documentation',
         'Topic :: Documentation :: Sphinx',
         'Topic :: Text Processing :: Markup',
