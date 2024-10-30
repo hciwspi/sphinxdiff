@@ -1,12 +1,12 @@
 .diff-del
 {
-  color: #c80040;
+  color: #FFA700;
   /*background: #ffebeb;*/
   text-decoration:line-through; 
 }
 
 .diff-add
 {
-  color: #00c840;
+  color: #0000ff;
   /*background: #ebffeb;*/
 }
