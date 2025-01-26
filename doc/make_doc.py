@@ -16,24 +16,19 @@ if __name__ == '__main__':
     
     ## Path to where make_doc operates:
     workingdir = os.path.dirname(os.path.abspath(__file__))
-    
-    ## Path to project base directory (usually github project level)
-    basedir = os.path.dirname(workingdir)
-    
+
     ## Path to (top level) document sources (.rst files)
-    docdir = os.path.join(basedir, 'doc')
+    docdir = workingdir
     
     ## Technical paths to shared doctree files and other build files
     builddir = os.path.join(workingdir, 'build')    
     doctreesdir = os.path.join(builddir, os.path.join('doctrees'))
-    
-    htmlbuild = os.path.join(builddir, 'html') 
  
     res = build_main(argv=['-b', 'html',
                            '-d', doctreesdir,
                            *tags,
                            docdir,
-                           htmlbuild,
+                           os.path.join(builddir, 'html'),
                            ])
     if 0 != res:
         print("html generation failed:", res)
@@ -49,5 +44,5 @@ if __name__ == '__main__':
     if 0 != res:
         print("latex generation failed:", res)
         sys.exit(res)
-     
+    
     print('Done')

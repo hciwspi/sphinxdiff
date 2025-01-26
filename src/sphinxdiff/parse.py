@@ -2,7 +2,8 @@
 
 from docutils.parsers.rst import directives, Directive
 from sphinxdiff.nodes import (NodeDiffChange, NodeDiffAdd, NodeDiffDel,
-                              NodeAddIn, NodeDelIn, NodeDiffChangeInline)
+                              NodeAddIn, NodeDelIn, NodeDiffChangeInline,
+                              NodeTagDiffIndex)
 from sphinxdiff.dbg import dbg_print_ast
 
 
@@ -171,3 +172,68 @@ class DiffChange(Directive):
             res.append(node)
             
         return res
+
+
+
+class TagDiffIndex(Directive):
+    required_arguments = 0
+    optional_arguments = 3
+    final_argument_whitespace = True
+    option_spec = {
+        'title': directives.unchanged,
+        'position': directives.unchanged,
+        'latex_presentation': directives.unchanged,
+        #'latex_index_columns': directives.unchanged,
+        #'latex_super_entry': directives.unchanged,
+        #'latex_index_in_toc': directives.unchanged,
+        }
+    has_content = False
+    
+    def _parse_position(self, text):
+        if text is None:
+            return None
+        return {'begin': 'begin',
+                'beginning': 'begin',
+                'start': 'begin',
+                'first': 'begin',
+                'before': 'begin',
+                'after': 'end',
+                'last': 'end',
+                'end': 'end',}.get(text.strip().lower(), None)
+    
+    def _parse_presentation(self, text):
+        if text is None:
+            text = 'definitionlist'
+        return {'definitionlist': 'definitionlist', 
+                'definition list': 'definitionlist', 
+                'deflist': 'definitionlist', 
+                'multiindex': 'multiindex', 
+                'multind': 'multiindex', 
+                'index': 'index', 
+                'single index': 'index', 
+                }.get(text.strip().lower(), None)
+    
+    def run(self):
+        position = self._parse_position(self.options.get('position', None))
+        title = self.options.get('title', 'Tag Changes Index')
+        presentation = self._parse_presentation(
+                self.options.get('latex_presentation', 'definitionlist'))
+        #columns = int(self.options.get('latex_index_columns', 0))
+        #super_entry = self.options.get('latex_super_entry', '')
+        
+        node = NodeTagDiffIndex('')
+        if position:
+            node['position'] = position
+        node['title'] = title
+        node['presentation'] = presentation
+        #node['columns'] = columns
+        #node['super_entry'] = super_entry
+        
+        document = self.state.document
+        if position == 'end':
+            document += node
+        elif position == 'begin':
+            pass
+            ## TODO:insert first in document?
+            
+        return []

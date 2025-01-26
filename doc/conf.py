@@ -14,12 +14,14 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.autodoc',
     'sphinxdiff',
     'sphinx_rtd_theme',
 ]
 
+# This enables the tag for sphinx
+tags.add('arrrrg')
 
+# Configure tags for sphinxdiff to track changes on
 sphinxdiff_tags = ['arrrrg']
 
 # The suffix(es) of source filenames.

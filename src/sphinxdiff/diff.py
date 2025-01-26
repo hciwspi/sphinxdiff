@@ -1,11 +1,14 @@
 '''Sphinx entry point for the sphinxdiff extension'''
 
 import os
+from sphinx.builders.latex import LaTeXBuilder
 from sphinxdiff.nodes import (NodeDiffChange, NodeDiffAdd, NodeDiffDel,
-                              NodeAddIn, NodeDelIn, NodeDiffChangeInline)
+                              NodeAddIn, NodeDelIn, NodeDiffChangeInline, 
+                              NodeTagDiffIndex)
 from sphinxdiff.parse import (parse_diff_change_inl, 
-                              DiffChange, DiffAddDel, DiffAddDelIn)
-from sphinxdiff.transforms import TransformOnly
+                              DiffChange, DiffAddDel, DiffAddDelIn, 
+                              TagDiffIndex)
+from sphinxdiff.transforms import (TransformOnly)
 from sphinxdiff.to_html import (visit_changed_in_html, 
                                 depart_changed_in_html,
                                 visit_change_node_html, 
@@ -17,9 +20,10 @@ from sphinxdiff.to_latex import (visit_changed_in_latex,
                                 visit_change_node_latex, 
                                 depart_change_node_latex, 
                                 visit_inl_change_node_latex, 
-                                depart_inl_change_node_latex,)
+                                depart_inl_change_node_latex,
+                                visit_tag_index_node_latex,)
 
-def nop(self, node): pass
+def nop(translator, node): pass
 
 
 class ConfigUpdater(object):
@@ -48,10 +52,8 @@ class ConfigUpdater(object):
              elements['preamble'] = '\n'.join((preamble,
                                                r'\usepackage{sphinxdiff}'))
 
-
 def setup(app):
-    """Initialization point of the directives / roles.
-    """
+    """Initialization point of the directives / roles."""
     
     here = os.path.abspath(os.path.dirname(__file__))
     texinputs = os.path.join(here, 'texinputs')
@@ -69,7 +71,6 @@ def setup(app):
                  html=(visit_changed_in_html, depart_changed_in_html),
                  latex=(visit_changed_in_latex, depart_changed_in_latex),
                  )
-                 
     app.add_node(NodeDiffChange,
                  html=(visit_change_node_html, depart_change_node_html),
                  latex=(visit_change_node_latex, depart_change_node_latex),
@@ -88,6 +89,10 @@ def setup(app):
                  latex=(visit_inl_change_node_latex, 
                         depart_inl_change_node_latex),
                  )
+    app.add_node(NodeTagDiffIndex,
+                 html=(nop, nop), ## TODO: Have an Index in html?
+                 latex=(visit_tag_index_node_latex, nop),
+                 )
 
     app.add_role('change', parse_diff_change_inl)
     app.add_role('add', parse_diff_change_inl)
@@ -100,4 +105,5 @@ def setup(app):
     app.add_directive('add_in', DiffAddDelIn)
     app.add_directive('del_in', DiffAddDelIn)
     
+    app.add_directive('tag-diff-index', TagDiffIndex)
 
