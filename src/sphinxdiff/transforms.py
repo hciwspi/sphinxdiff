@@ -63,13 +63,12 @@ class TransformOnly(SphinxTransform):
             node.replace_self(diff_node)
                 
     def eval_expression_for_tag(self, expression, tagname):
-        tagnames = list(self.app.builder.tags.tags.keys())
+        tagnames = list(self.app.builder.tags).copy()
         if tagname not in tagnames:
             return (True, True)
         
         tags_with = Tags(tagnames)
-        tagnames.remove(tagname)
-        tags_without = Tags(tagnames)
+        tags_without = Tags([t for t in tagnames if t != tagname])
         
         try:
             return (tags_with.eval_condition(expression),

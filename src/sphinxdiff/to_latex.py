@@ -114,22 +114,20 @@ def top_sections(latex_translator):
     return (r'\section', r'\subsection', r'\subsubsection', )
  
   
-_pat_underscore = re.compile(r'[^\\]_')
+_pat_underscore = re.compile(r'([^\\])_')
 
 def append_deflist_tag_index(body, tag_index, section_type, title):
-    print('append_deflist_tag_index', title, tag_index) 
-    
     if not tag_index:
         return
  
     if title.strip():
         ## TODO: Have an option to set the *: latex_index_in_toc?
-        body.append(f'\n\n\\{section_type}*{{{title}}}')
+        body.append(f'\n\n{section_type}*{{{title}}}')
     body.append('\n\n\\begin{description}')
     
     for tag in sorted(tag_index.keys()):
         labels = tag_index[tag]
-        tag = pat_underscore.sub(r'\_', tag)
+        tag = _pat_underscore.sub(r'\1\_', tag)
         if labels:
             body.append(f'\n\\item[{tag}]')
             for label in labels:
