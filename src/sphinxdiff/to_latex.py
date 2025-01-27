@@ -123,6 +123,7 @@ def append_deflist_tag_index(body, tag_index, section_type, title):
     if title.strip():
         ## TODO: Have an option to set the *: latex_index_in_toc?
         body.append(f'\n\n{section_type}*{{{title}}}')
+        body.append(r'\n\label{\detokenize{sphinxdiff-tag-change-index}}') 
     body.append('\n\n\\begin{description}')
     
     for tag in sorted(tag_index.keys()):
@@ -172,7 +173,7 @@ def visit_tag_index_node_latex(latex_translator, node):
                 index_src))
     elif position == 'start': 
         print('option "start" not implemented for ') 
-        #body.append('\n\\newpage')
-    
-    
+        #body.append('\n\\newpage'
+
+
 
