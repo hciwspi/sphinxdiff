@@ -122,8 +122,8 @@ def append_deflist_tag_index(body, tag_index, section_type, title):
  
     if title.strip():
         ## TODO: Have an option to set the *: latex_index_in_toc?
-        body.append(f'\n\n{section_type}*{{{title}}}')
-        body.append(r'\n\label{\detokenize{sphinxdiff-tag-change-index}}') 
+        body.append(f'\n\n{section_type}*{{{title}}}\n')
+        body.append(r'\label{\detokenize{sphinxdiff-tag-change-index}}') 
     body.append('\n\n\\begin{description}')
     
     for tag in sorted(tag_index.keys()):
